@@ -1,0 +1,6 @@
+classpath: @classpath@
+changeLogFile=@changeLogFile@
+username=@username@
+password=@password@
+url=@url@
+driver=@driver@

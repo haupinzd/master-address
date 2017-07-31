@@ -1,0 +1,6 @@
+driver=com.sap.db.jdbc.Driver
+classpath: tools/liquibase/ngdbc.jar
+changeLogFile=changelogs/master.xml
+username=
+password=
+url=jdbc:sap://hanacloud:32215
