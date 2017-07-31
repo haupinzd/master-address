@@ -1,4 +1,4 @@
-create table address_cleanse_runs (
+create column table address_cleanse_runs (
 
 --===============================================
 -- [address_cleanse_runs]

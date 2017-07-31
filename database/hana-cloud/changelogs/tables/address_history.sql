@@ -1,4 +1,4 @@
-create table address_history (
+create column table address_history (
 
 --===============================================
 -- [address_history]
@@ -14,3 +14,5 @@ create table address_history (
   , run_id integer not null
 )
 ;
+
+alter table address_history add constraint undx_address_history unique (address_source_type, address_source_id);
