@@ -38,5 +38,5 @@
       Dictionary / Vocabulary for address cleanup
     </comment>
     <sqlFile splitStatements="true" stripComments="false" path="changelogs/tables/address_dictionary.sql" />
-  </changeSet> 
+  </changeSet>
 </databaseChangeLog>

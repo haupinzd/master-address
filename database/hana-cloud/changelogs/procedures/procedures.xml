@@ -5,4 +5,21 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 	
+  <!--
+    Add new procedures here!
+  -->
+
+  <changeSet id="1000" author="haupinzd">
+    <comment>
+      Add master ETL procedure
+    </comment>
+    <sql> create procedure etl_master() as header only </sql>
+  </changeSet>  
+
+  <changeSet id="1001" author="haupinzd" runOnChange="true">
+    <comment>
+      Master address cleansing procedure
+    </comment>
+    <sqlFile splitStatements="false" stripComments="false" path="changelogs/procedures/etl_master.sql" />
+  </changeSet>
 </databaseChangeLog>
