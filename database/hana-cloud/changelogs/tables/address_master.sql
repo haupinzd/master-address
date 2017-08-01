@@ -1,4 +1,4 @@
-create column table address_master (
+create history column table address_master (
   
 --======================================
 -- [address_master]
