@@ -8,7 +8,28 @@ alter procedure etl_master
   --======================================
 
   language sqlscript as
+    cursor c_cols for 
+      select column_name
+        from m_temporary_table_columns
+        where table_name = 'T_ADDRESS_MASTER'
+        order by position
+      ;
+
+    cursor c_dict (v_context varchar(64)) for
+      select text_old, text_new
+        from address_dictionary
+        where context = :v_context
+        ;
+
+    l_run_id integer;
+    l_row_count integer = 0;
   begin
+    -- Start run session
+    insert into address_cleanse_runs(start_ts) values (current_timestamp);
+    select current_identity_value()
+      into l_run_id
+      from dummy;
+
     truncate table t_address_master;
 
     insert into t_address_master (
@@ -68,4 +89,27 @@ alter procedure etl_master
     from stage_address_leta
     ;
 
+    for c as c_cols do
+      insert into debug_messages (msg) values ('inside outer loop - ' || c.column_name);
+
+      --open c_dict(c.column_name);
+      
+      for d as c_dict(c.column_name) do
+        execute immediate 'update t_address_master set ' || c.column_name || ' = replace_regexpr(''\b' || d.text_old || '\b'' in ' || c.column_name || ' with ''' || d.text_new || ''')';
+        --execute immediate 'update t_address_master set ' || c.column_name || ' = replace(' || c.column_name || ', ''' || d.text_old || ''', ''' || d.text_new || ''')';
+
+        select ::rowcount + l_row_count into l_row_count from dummy;
+      end for;
+    end for;
+
+    -- Merge into address_master here
+
+    close c_dict;
+
+    -- end run
+    update address_cleanse_runs
+      set end_ts = current_timestamp
+        , notes = 'Updates: ' || l_row_count
+      where run_id = l_run_id
+    ;
   end;
