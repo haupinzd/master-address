@@ -15,6 +15,7 @@ create global temporary table t_address_master (
   , address_street_suffix_direction varchar(16)
   , address_unit_number varchar(64)
   , address_unit_type varchar(16)
+  , address_room varchar(32)
   , address_city varchar(32)
   , address_place varchar(32)
   , address_county varchar(32)

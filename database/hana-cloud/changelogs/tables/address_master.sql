@@ -14,8 +14,9 @@ create history column table address_master (
   , address_street_name varchar(32)
   , address_street_suffix_type varchar(32)
   , address_street_suffix_direction varchar(16)
-  , address_unit_number varchar(8)
+  , address_unit_number varchar(128)
   , address_unit_type varchar(16)
+  , address_room varchar(32)
   , address_city varchar(32)
   , address_place varchar(32)
   , address_county varchar(32)
@@ -32,7 +33,7 @@ create history column table address_master (
   , address_last_update timestamp
   , address_source varchar(32)
   , address_active tinyint
-  , address_hash varchar(32)
+  , address_hash varchar(32) not null
   , address_usps_standard varchar(64)
   , address_number_suffix varchar(8)
   , address_building_unit varchar(64)
@@ -43,4 +44,4 @@ create history column table address_master (
 ;
 
 alter table address_master add constraint pk_address_master primary key (address_id);
-alter table address_master add constraint undx_address_master unique (address_full, address_city);
+alter table address_master add constraint undx_address_master unique (address_hash);
