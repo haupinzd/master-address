@@ -1,0 +1,17 @@
+drop function unit_cleanse;
+
+CREATE FUNCTION unit_cleanse(p_unit varchar(64))
+RETURNS oresult varchar(128)
+LANGUAGE SQLSCRIPT AS
+BEGIN
+SELECT REPLACE_REGEXPR('^([0-9]+)' IN EUNICH WITH 'UNIT \1' OCCURRENCE ALL) INTO p_unit FROM (SELECT p_unit AS EUNICH from DUMMY)  ;                    --will replace 234 with UNIT 234.
+SELECT REPLACE_REGEXPR('^\s*([A-Z])(\s*-\s+|\s+-\s*)([0-9]+)\s*' IN EUNICH WITH 'UNIT \1-\3' OCCURRENCE ALL) INTO p_unit FROM (SELECT p_unit AS EUNICH from DUMMY)  ;   --will replace A- 234 with A-234.  Will add "Unit"
+SELECT REPLACE_REGEXPR('([A-Z])(\s*-\s+|\s+-\s*)([0-9]+)\s*' IN EUNICH WITH '\1-\3' OCCURRENCE ALL) INTO p_unit FROM (SELECT p_unit AS EUNICH from DUMMY)  ; --will replace A- 234 with A-234.  Will NOT add "Unit"
+SELECT REPLACE_REGEXPR('^\s*([0-9]+)\.[0-9]+' IN EUNICH WITH 'UNIT \1' OCCURRENCE ALL) INTO p_unit FROM (SELECT p_unit AS EUNICH from DUMMY)  ;                    --will replace 234.4 with 234.  Will add "Unit"
+SELECT REPLACE_REGEXPR('([0-9]+)\.[0-9]+' IN EUNICH WITH '\1'  OCCURRENCE ALL) INTO p_unit FROM (SELECT p_unit AS EUNICH from DUMMY)  ;                       --will replace 234.4 with 234.  Will NOT add "Unit"
+SELECT REPLACE_REGEXPR('^\s*([A-Z0-9]+)\s*(&|/)\s*([A-Z0-9]+)'  IN EUNICH WITH 'UNIT \1 \2 \3' OCCURRENCE ALL)	INTO p_unit FROM (SELECT p_unit AS EUNICH from DUMMY)  ;  		--will replace 234/A with 234 / A and add UNIT
+SELECT REPLACE_REGEXPR('([A-Z0-9]+)\s*(&|/)\s*([A-Z0-9]+)'  IN EUNICH WITH '\1 \2 \3' OCCURRENCE ALL)	INTO p_unit FROM (SELECT p_unit AS EUNICH from DUMMY)  ;  		--will replace 234/A with 234 / A and NOT add UNIT
+
+oresult = p_unit;
+
+END
