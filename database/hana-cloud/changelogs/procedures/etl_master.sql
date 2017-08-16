@@ -176,6 +176,10 @@ alter procedure etl_master
     from t_address_master
     ;
 
+    update address_master
+      set address_street_name_full = address_street_prefix_direction || ' ' || address_street_prefix_type || ' ' || address_street_name || ' ' || address_street_suffix_type || ' ' || address_street_suffix_direction
+    ;
+
     truncate table address_history;
     insert into address_history (address_id, address_source_type, address_source_id, run_id)
     select am.address_id, xam.address_source_type, xam.address_source_id, l_run_id

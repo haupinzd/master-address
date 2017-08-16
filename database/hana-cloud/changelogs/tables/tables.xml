@@ -39,4 +39,13 @@
     </comment>
     <sqlFile splitStatements="true" stripComments="false" path="changelogs/tables/address_dictionary.sql" />
   </changeSet>
+  
+  <changeSet id="6" author="ahmadmm">
+    <comment>
+      Adding a field to address master to contain full street name (including direction prefix/suffix)
+    </comment>
+    <sql>
+      alter table address_master add (address_street_name_full varchar(64))
+    </sql>
+  </changeSet>  
 </databaseChangeLog>
